@@ -58,7 +58,7 @@ We follow the same setup in [Consistency Policy](https://github.com/Aaditya-Pras
 
 
 ```console
-(consistency-policy)[consistency-policy]$ python train.py --config-dir=configs/ --config-name=edm_d4rl_hopper_mr.yaml logging.name=teacher_d4rl_hopper_mr
+python train.py --config-dir=configs/ --config-name=edm_d4rl_hopper_mr.yaml logging.name=teacher_d4rl_hopper_mr
 ```
 
 
@@ -67,7 +67,7 @@ We follow the same setup in [Consistency Policy](https://github.com/Aaditya-Pras
 To train a reward model, specify ```training.output_dir``` and run: 
 
 ```console
-(consistency-policy)[consistency-policy]$ python train.py --config-dir=configs/ --config-name=reward_d4rl_hopper_mr.yaml logging.name=reward_d4rl_hopper_mr
+python train.py --config-dir=configs/ --config-name=reward_d4rl_hopper_mr.yaml logging.name=reward_d4rl_hopper_mr
 ```
 
 
@@ -76,7 +76,7 @@ Once you have a trained teacher and reward checkpoint, you can distill a RACTD m
 
 
 ```console
-(consistency-policy)[consistency-policy]$ python train.py --config-dir=configs/ --config-name=guided_ctmp_hopper_mr.yaml logging.name=guided_student_hopper_mr
+python train.py --config-dir=configs/ --config-name=guided_ctmp_hopper_mr.yaml logging.name=guided_student_hopper_mr
 ```
 
 
