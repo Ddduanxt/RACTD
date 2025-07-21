@@ -83,7 +83,12 @@ Once you have a trained teacher and reward checkpoint, you can distill a RACTD m
 ## Citation
 If you find our work interesting or helpful, please consider citing
 ```
-
+@article{duan2025accelerating,
+  title={Accelerating Diffusion Models in Offline RL via Reward-Aware Consistency Trajectory Distillation},
+  author={Duan, Xintong and He, Yutong and Tajwar, Fahim and Salakhutdinov, Ruslan and Kolter, J Zico and Schneider, Jeff},
+  journal={arXiv preprint arXiv:2506.07822},
+  year={2025}
+}
 
 ```
 
