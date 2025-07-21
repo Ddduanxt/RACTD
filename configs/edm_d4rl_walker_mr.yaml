@@ -1,0 +1,161 @@
+_target_: consistency_policy.teacher_d4rl.edm_workspace_d4rl.EDMD4RLWorkspace
+checkpoint:
+  save_last_ckpt: true
+  save_last_snapshot: false
+  topk:
+    format_str: epoch={epoch:04d}-test_mean_scores={test_mean_scores:.3f}.ckpt
+    k: 5
+    mode: max
+    monitor_key: test_mean_scores
+dataloader:
+  batch_size: 1024 
+  num_workers: 8
+  persistent_workers: false
+  pin_memory: true
+  shuffle: true
+dataset_obs_steps: 16
+ema:
+  _target_: diffusion_policy.model.diffusion.ema_model.EMAModel
+  inv_gamma: 1.0
+  max_value: 0.9999
+  min_value: 0.0
+  power: 0.75
+  update_after_step: 0
+exp_name: default
+horizon: 16
+keypoint_visible_rate: 1.0
+logging:
+  group: null
+  id: null
+  mode: online
+  name: dp_test
+  project: diffusion_policy_debug
+  resume: false
+  tags:
+  - train_diffusion_unet_d4rl
+  - walker_medium_replay
+  - default
+multi_run:
+  run_dir: data/outputs/2022.12.29/22.31.27_train_diffusion_unet_hybrid_square_image
+  wandb_name_base: dp_test
+n_action_steps: 1
+n_latency_steps: 0
+n_obs_steps: 1
+name: train_diffusion_unet_d4rl
+obs_as_global_cond: true
+optimizer:
+  _target_: torch.optim.AdamW
+  betas:
+  - 0.95
+  - 0.999
+  eps: 1.0e-08
+  lr: 0.0001
+  weight_decay: 1.0e-06
+past_action_visible: false
+policy:
+  _target_: consistency_policy.teacher_d4rl.edm_policy_d4rl.KarrasUnetHybridD4RLPolicy
+  inference_mode: none # this will be populated automatically from training.inference_mode, do not set it here
+  cond_predict_scale: true
+  diffusion_step_embed_dim: 128
+  down_dims:
+  - 512
+  - 1024
+  - 2048
+  horizon: 16
+  kernel_size: 5
+  n_action_steps: 1
+  n_groups: 8
+  n_obs_steps: 1
+  delta: -1
+  noise_scheduler:
+    _target_: consistency_policy.diffusion.Karras_Scheduler
+    time_min: 0.02
+    time_max: 80.0
+    rho: 7.0
+    bins: 80
+    solver: heun
+    time_sampler: log_normal
+    scaling: boundary
+    use_c_in: true
+    data_std: .5
+    clamp: true
+    name: heun80
+  obs_as_global_cond: true
+  shape_meta:
+    action:
+      shape:
+      - 6
+    observation:
+      shape: 
+      - 17
+shape_meta:
+    action:
+      shape:
+      - 6
+    observation:
+      shape: 
+      - 17
+task:
+  abs_action: true
+  dataset:
+    _target_: diffusion_policy.dataset.d4rl_dataset.D4RLDataset
+    env_name: 'walker2d-medium-replay-v2'
+    horizon: 16
+    pad_before: 0
+    pad_after: 0
+    seed: 42
+    val_ratio: 0.0
+  env_runner:
+    _target_: diffusion_policy.env_runner.d4rl_lowdim_runner.D4RLLowdimRunner
+    env_name: 'walker2d-medium-replay-v2'
+    crf: 22
+    fps: 80
+    max_steps: 1000
+    n_action_steps: 1
+    n_envs: 1
+    n_obs_steps: 1
+    n_test: 2
+    n_test_vis: 16
+    n_train: 2
+    n_train_vis: 2
+    past_action: false
+    test_start_seed: 100000
+    tqdm_interval_sec: 1.0
+  name: d4rl_walker_medium_replay
+  shape_meta:
+    action:
+      shape:
+      - 6
+    observation:
+      shape: 
+      - 17
+  task_name: d4rl_walker_medium_replay
+task_name: d4rl_walker_medium_replay
+training:
+  inference_mode: false # Setting this to true disables the teacher, warm start, and training loop
+  online_rollouts: true # Setting this to false disables the env_runner
+  checkpoint_every: 50
+  debug: false
+  device: cuda:0
+  gradient_accumulate_every: 1
+  lr_scheduler: cosine
+  lr_warmup_steps: 2000
+  max_train_steps: null
+  max_val_steps: null
+  num_epochs: 1000
+  resume: false
+  resume_path: ???
+  rollout_every: 50
+  sample_every: 5
+  seed: 42
+  tqdm_interval_sec: 1.0
+  use_ema: true
+  val_every: 1
+  val_sample_every: 5
+  output_dir: ??? ## path to output directory
+val_dataloader:
+  batch_size: 1024
+  num_workers: 8
+  persistent_workers: false
+  pin_memory: true
+  shuffle: false

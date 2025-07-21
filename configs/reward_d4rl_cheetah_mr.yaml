@@ -1,0 +1,159 @@
+_target_: consistency_policy.reward_d4rl.reward_d4rl_workspace.TrainD4RLRewardWorkspace
+checkpoint:
+  save_last_ckpt: true
+  save_last_snapshot: false
+  topk:
+    format_str: epoch={epoch:04d}-val_loss={val_loss:.3f}.ckpt
+    k: 5
+    mode: min
+    monitor_key: val_loss
+dataloader:
+  batch_size: 32
+  num_workers: 8
+  persistent_workers: false
+  pin_memory: true
+  shuffle: true
+dataset_obs_steps: 1
+ema:
+  _target_: diffusion_policy.model.diffusion.ema_model.EMAModel
+  inv_gamma: 1.0
+  max_value: 0.9999
+  min_value: 0.0
+  power: 0.75
+  update_after_step: 0
+exp_name: default
+horizon: 1
+keypoint_visible_rate: 1.0
+logging:
+  group: null
+  id: null
+  mode: online
+  name: 2022.12.29-22.31.30_train_diffusion_unet_hybrid_square_image
+  project: diffusion_policy_debug
+  resume: false
+  tags:
+  - train_diffusion_unet
+  - d4rl
+  - default
+multi_run:
+  run_dir: data/outputs/2022.12.29/22.31.30_train_diffusion_unet_hybrid_square_image
+  wandb_name_base: 2022.12.29-22.31.30_train_diffusion_unet_hybrid_square_image
+n_action_steps: 1
+n_latency_steps: 0
+n_obs_steps: 1
+name: train_reward_d4rl
+obs_as_global_cond: true
+optimizer:
+  _target_: torch.optim.AdamW
+  betas:
+  - 0.95
+  - 0.999
+  eps: 1.0e-08
+  lr: 0.0002
+  weight_decay: 1.0e-3
+past_action_visible: false
+policy:
+  _target_: consistency_policy.reward_d4rl.reward_d4rl_policy.DiffusionUnetD4RLReward
+  cond_predict_scale: true
+  diffusion_step_embed_dim: 32
+  down_dims:
+  - 64
+  - 128
+  - 256
+  horizon: 1
+  kernel_size: 5
+  n_action_steps: 1
+  n_groups: 8
+  n_obs_steps: 1
+  noise_scheduler:
+    _target_: diffusers.schedulers.scheduling_ddim.DDIMScheduler
+    num_train_timesteps: 100
+    beta_start: 0.0001
+    beta_end: 0.02
+    beta_schedule: squaredcos_cap_v2
+    clip_sample: True
+    set_alpha_to_one: True
+    steps_offset: 0
+    prediction_type: epsilon # or sample
+  num_inference_steps: 15
+  obs_as_global_cond: true
+  obs_encoder_group_norm: true
+  shape_meta:
+    action:
+      shape:
+      - 6
+    observation:
+      shape: 
+      - 17
+shape_meta:
+  action:
+    shape:
+    - 6
+  observation:
+    shape: 
+    - 17
+task:
+  abs_action: true
+  dataset:
+    _target_: diffusion_policy.dataset.d4rl_dataset.D4RLDataset
+    env_name: 'halfcheetah-medium-replay-v2'
+    horizon: 1
+    pad_after: 0
+    pad_before: 0
+    seed: 42
+    val_ratio: 0.1
+  env_runner:
+    _target_: diffusion_policy.env_runner.d4rl_lowdim_runner.D4RLLowdimRunner
+    env_name: 'halfcheetah-medium-replay-v2'
+    crf: 22
+    fps: 10
+    max_steps: 1000
+    n_action_steps: 1
+    n_envs: 1
+    n_obs_steps: 1
+    n_test: 20
+    n_test_vis: 16
+    n_train: 2
+    n_train_vis: 2
+    past_action: false
+    test_start_seed: 100000
+    tqdm_interval_sec: 1.0
+  name: d4rl_cheetah_medium_replay
+  shape_meta:
+    action:
+      shape:
+      - 6
+    observation:
+      shape: 
+      - 17
+  task_name: d4rl_cheetah_medium_replay
+task_name: d4rl_cheetah_medium_replay
+training:
+  checkpoint_every: 5
+  inference_mode: false
+  online_rollouts: true
+  debug: false
+  device: cuda:0
+  gradient_accumulate_every: 1
+  lr_scheduler: cosine
+  lr_warmup_steps: 20
+  max_train_steps: null
+  max_val_steps: null
+  num_epochs: 50
+  resume: false
+  resume_path: ???
+  rollout_every: 50
+  sample_every: 5
+  seed: 42
+  tqdm_interval_sec: 1.0
+  use_ema: true
+  val_every: 1
+  val_sample_every: 5
+  num_evaluate_steps: 8
+  output_dir: ??? ## path to output directory
+val_dataloader:
+  batch_size: 64
+  num_workers: 8
+  persistent_workers: false
+  pin_memory: true
+  shuffle: false
