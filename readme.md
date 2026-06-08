@@ -1,6 +1,6 @@
 # Reward Aware Consistency Trajectory Distillation
 
-The official PyTorch implementation of [[Accelerating Diffusion Models in Offline RL via Reward-Aware Consistency Trajectory Distillation]](https://arxiv.org/pdf/2506.07822). 
+The official PyTorch implementation of [[Accelerating Diffusion Planners in Offline RL via Reward-Aware Consistency Trajectory Distillation]](https://arxiv.org/pdf/2506.07822). 
 
 
 
